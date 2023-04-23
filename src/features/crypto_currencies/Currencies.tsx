@@ -1,31 +1,27 @@
-import { useEffect, useState } from "react";
-import { useOutletContext, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams, useLoaderData } from "react-router-dom";
 import { getData } from "../../utils/api";
 import CurrencyItem from "./CurrencyItem";
 import type { CurrencyItemI } from "./CurrencyItem";
 
-const Currencies = () => {
-  const [currency_data, setCurrencyData] = useState<CurrencyItemI[] | []>([]);
+// eslint-disable-next-line react-refresh/only-export-components
+export const loader = async () => {
+  const response = await getData();
+  return response.data;
+};
 
-  const outlet_context = useOutletContext();
+const Currencies = () => {
+  const loader_data = useLoaderData();
+
+  const [currency_data, setCurrencyData] = useState<CurrencyItemI[] | []>(
+    (loader_data as CurrencyItemI[]) || []
+  );
 
   const [search_params, setSearchParams] = useSearchParams();
 
   const sort_by_parameter = search_params.get("sortBy");
-  console.log(sort_by_parameter);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getData();
-        setCurrencyData(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  console.log(loader_data);
 
   if (currency_data.length === 0) {
     return <div>Loading...</div>;
