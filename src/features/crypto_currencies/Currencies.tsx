@@ -62,6 +62,7 @@ const Currencies = () => {
   return (
     <>
       <div>
+        <h3>Supply filter</h3>
         <button
           onClick={() => setParam("sortBy", "ASC")}
           className={sort_by_parameter === "ASC" ? "active_param" : ""}
