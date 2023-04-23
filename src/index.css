@@ -67,3 +67,16 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.active_link {
+  color: red;
+}
+
+.active_link:hover {
+  color: orangered;
+}
+
+.active_param {
+  background-color: yellow;
+  color: black;
+}
