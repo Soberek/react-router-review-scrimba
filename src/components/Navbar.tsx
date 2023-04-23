@@ -1,10 +1,17 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
+  const handleActiveLink = ({ isActive }: { isActive: boolean }) =>
+    isActive ? "active_link" : "";
+
   return (
     <nav>
-      <Link to="/">Home</Link>
-      <Link to="currencies">Currencies</Link>
+      <NavLink to="/" className={handleActiveLink}>
+        Home
+      </NavLink>
+      <NavLink to="currencies" className={handleActiveLink}>
+        Currencies
+      </NavLink>
     </nav>
   );
 };
