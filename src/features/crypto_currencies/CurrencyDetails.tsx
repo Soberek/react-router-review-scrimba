@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { getData } from "../../utils/api";
 import { useEffect, useState } from "react";
 
@@ -6,6 +6,10 @@ const CurrencyDetails = () => {
   const { id } = useParams();
 
   const [currency_data, setCurrencyData] = useState();
+
+  const from_link_state = useLocation().state;
+
+  console.log(from_link_state);
 
   useEffect(() => {
     const getCurrencyData = async () => {
@@ -18,15 +22,15 @@ const CurrencyDetails = () => {
     };
 
     getCurrencyData();
-    if (currency_data) {
-      console.log(Object.values(currency_data.data));
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
-      <Link to=".." relative="path">
+      <Link
+        to={`..${from_link_state ? "?" + from_link_state : ""}`}
+        relative="path"
+      >
         Go back
       </Link>
       <table>
@@ -41,8 +45,8 @@ const CurrencyDetails = () => {
         <tbody>
           <tr>
             {currency_data &&
-              Object.values(currency_data.data).map((value) => (
-                <td>{value}</td>
+              Object.values(currency_data.data).map((value, idx) => (
+                <td key={idx}>{value}</td>
               ))}
           </tr>
         </tbody>

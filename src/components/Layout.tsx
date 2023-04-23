@@ -8,7 +8,7 @@ const Layout = () => {
     <>
       <Navbar />
       <main>
-        <Outlet />
+        <Outlet context={{ some_data: { name: "Joe" } }} />
       </main>
       <Footer />
     </>

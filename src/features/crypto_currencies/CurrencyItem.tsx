@@ -5,9 +5,17 @@ export interface CurrencyItemI {
   symbol: string;
   name: string;
   supply: string;
+  param: string;
 }
 
-const CurrencyItem = ({ id, rank, symbol, name, supply }: CurrencyItemI) => {
+const CurrencyItem = ({
+  id,
+  rank,
+  symbol,
+  name,
+  supply,
+  param,
+}: CurrencyItemI) => {
   return (
     <tr>
       <td>{rank}</td>
@@ -16,7 +24,9 @@ const CurrencyItem = ({ id, rank, symbol, name, supply }: CurrencyItemI) => {
       <td>{name}</td>
       <td>{supply}</td>
       <td>
-        <Link to={id}>Details</Link>
+        <Link to={id} state={param}>
+          Details
+        </Link>
       </td>
     </tr>
   );
