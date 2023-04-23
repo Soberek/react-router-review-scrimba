@@ -1,12 +1,22 @@
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import Layout from "./components/Layout";
+import Home from "./components/Home";
+import Currencies from "./features/crypto_currencies/Currencies";
+import CurrencyDetails from "./features/crypto_currencies/CurrencyDetails";
 
 function App() {
-
   return (
-    <>
-      <div>init</div>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="currencies" element={<Currencies />} />
+          <Route path="currencies/:id" element={<CurrencyDetails />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
