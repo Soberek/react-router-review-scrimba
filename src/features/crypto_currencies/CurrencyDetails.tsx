@@ -1,29 +1,25 @@
-import { useParams, Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useLoaderData } from "react-router-dom";
 import { getData } from "../../utils/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+export const loader = async ({ params }) => {
+  throw {
+    message: "Chujnia, nie działa",
+  };
+
+  const data = await getData(params.id);
+
+  return data;
+};
 
 const CurrencyDetails = () => {
-  const { id } = useParams();
+  const loader_data = useLoaderData();
 
-  const [currency_data, setCurrencyData] = useState();
+  console.log(loader_data);
+
+  const [currency_data, setCurrencyData] = useState(loader_data || {});
 
   const from_link_state = useLocation().state;
-
-  console.log(from_link_state);
-
-  useEffect(() => {
-    const getCurrencyData = async () => {
-      try {
-        const data = await getData(id);
-        setCurrencyData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getCurrencyData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>
