@@ -6,15 +6,15 @@ import type { CurrencyItemI } from "./CurrencyItem";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const loader = async () => {
-  const response = await getData();
-  return response.data;
+  const data = await getData();
+  return data.data;
 };
 
 const Currencies = () => {
   const loader_data = useLoaderData();
 
   const [currency_data, setCurrencyData] = useState<CurrencyItemI[] | []>(
-    (loader_data as CurrencyItemI[]) || []
+    loader_data as CurrencyItemI[]
   );
 
   const [search_params, setSearchParams] = useSearchParams();
