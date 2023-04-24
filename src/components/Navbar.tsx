@@ -12,6 +12,9 @@ const Navbar = () => {
       <NavLink to="currencies" className={handleActiveLink}>
         Currencies
       </NavLink>
+      <NavLink to="login" className={handleActiveLink}>
+        Login Page
+      </NavLink>
     </nav>
   );
 };
