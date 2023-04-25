@@ -1,39 +1,22 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  redirect,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import Layout from "./components/Layout";
 import Home from "./components/Home";
-import Currencies from "./features/crypto_currencies/Currencies";
-import CurrencyDetails from "./features/crypto_currencies/CurrencyDetails";
-import PageNotFound from "./components/PageNotFound";
+import Currencies from "./pages/Currencies/Currencies";
+import CurrencyDetails from "./pages/Currencies/CurrencyDetails";
+import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import ErrorElements from "./components/ErrorElements";
-import LoginPage from "./components/LoginPage";
+import LoginPage from "./pages/Login/LoginPage";
 
 // *loaders
-import { loader as CurrenciesLoader } from "./features/crypto_currencies/Currencies";
-import { loader as CurrencyDetailsLoader } from "./features/crypto_currencies/CurrencyDetails";
+import { currenciesLoader } from "./pages/Currencies/loaders";
+import { currencyDetailsLoader } from "./pages/Currencies/loaders";
 
 // *action
-import { action as LoginPageAction } from "./components/LoginPage";
+import { action as LoginPageAction } from "./pages/Login/action";
 
-// *Protect route, przekieruj na /login i na tym login wyświetl wiadomość
-// *Wymagania:
-// - użyj do tego loadera
-// - oraz outletu
-
-// każdy route
-
-function requireAuth() {
-  const is_logged = localStorage.getItem("login");
-  if (!is_logged) {
-    return redirect("/login?message=You must be logged in!");
-  }
-
-  return null;
-}
+// *mock
+import { requireAuth } from "./utils/auth";
 
 const router = createBrowserRouter([
   {
@@ -50,19 +33,19 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-        loader: () => {
-          return requireAuth();
+        loader: ({ request }) => {
+          return requireAuth(request.url);
         },
       },
       {
         path: "currencies",
         element: <Currencies />,
-        loader: CurrenciesLoader,
+        loader: currenciesLoader,
       },
       {
         path: "currencies/:id",
         element: <CurrencyDetails />,
-        loader: CurrencyDetailsLoader,
+        loader: currencyDetailsLoader,
         errorElement: <ErrorElements />,
       },
       {
