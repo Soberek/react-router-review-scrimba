@@ -1,19 +1,10 @@
 import { Link, useLocation, useLoaderData } from "react-router-dom";
-import { getData } from "../../utils/api";
 import { useState } from "react";
 
-export const loader = async ({ params }) => {
-  const data = await getData(params.id);
-
-  return data;
-};
-
 const CurrencyDetails = () => {
-  const loader_data = useLoaderData();
+  const loader_data = useLoaderData() as { data: [] };
 
-  console.log(loader_data);
-
-  const [currency_data, setCurrencyData] = useState(loader_data);
+  const [currency_data] = useState(loader_data);
 
   const from_link_state = useLocation().state;
 

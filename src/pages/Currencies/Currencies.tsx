@@ -1,27 +1,20 @@
 import { useState } from "react";
 import { useSearchParams, useLoaderData } from "react-router-dom";
-import { getData } from "../../utils/api";
 import CurrencyItem from "./CurrencyItem";
 import type { CurrencyItemI } from "./CurrencyItem";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const loader = async () => {
-  const data = await getData();
-  return data.data;
-};
 
 const Currencies = () => {
   const loader_data = useLoaderData();
 
-  const [currency_data, setCurrencyData] = useState<CurrencyItemI[] | []>(
+  const [currency_data] = useState<CurrencyItemI[] | []>(
     loader_data as CurrencyItemI[]
   );
 
   const [search_params, setSearchParams] = useSearchParams();
 
   const sort_by_parameter = search_params.get("sortBy");
-
-  console.log(loader_data);
 
   if (currency_data.length === 0) {
     return <div>Loading...</div>;
