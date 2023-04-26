@@ -1,36 +1,16 @@
-import { useState } from "react";
-import { useSearchParams, useLoaderData } from "react-router-dom";
+import { useSearchParams, useLoaderData, Await } from "react-router-dom";
 import CurrencyItem from "./CurrencyItem";
 import type { CurrencyItemI } from "./CurrencyItem";
+import React from "react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 
-const Currencies = () => {
+const Currencies = (): JSX.Element => {
   const loader_data = useLoaderData();
-
-  const [currency_data] = useState<CurrencyItemI[] | []>(
-    loader_data as CurrencyItemI[]
-  );
 
   const [search_params, setSearchParams] = useSearchParams();
 
   const sort_by_parameter = search_params.get("sortBy");
-
-  if (currency_data.length === 0) {
-    return <div>Loading...</div>;
-  }
-
-  let display_currencies: CurrencyItemI[] = currency_data;
-
-  if (sort_by_parameter) {
-    if (sort_by_parameter === "ASC") {
-      display_currencies = currency_data.sort((a, b) => +a.supply - +b.supply);
-    } else if (sort_by_parameter === "DESC") {
-      display_currencies = currency_data.sort((a, b) => +b.supply - +a.supply);
-    }
-  } else {
-    display_currencies = currency_data.sort((a, b) => +a.rank - +b.rank);
-  }
 
   const setParam = (key: string, value: string) => {
     if (search_params.get(key) === value) {
@@ -47,6 +27,43 @@ const Currencies = () => {
 
     setSearchParams(search_params);
   };
+
+  function renderCurrencies(data) {
+    if (data === 0) {
+      return <div>Loading...</div>;
+    }
+
+    console.log(data);
+
+    let display_currencies: CurrencyItemI[] = [];
+
+    if (sort_by_parameter) {
+      if (sort_by_parameter === "ASC") {
+        display_currencies = data.data.sort((a, b) => +a.supply - +b.supply);
+      } else if (sort_by_parameter === "DESC") {
+        display_currencies = data.data.sort((a, b) => +b.supply - +a.supply);
+      }
+    } else {
+      display_currencies = data.data.sort((a, b) => +a.rank - +b.rank);
+    }
+
+    return (
+      <tbody>
+        {display_currencies &&
+          display_currencies.map((currency) => (
+            <CurrencyItem
+              key={currency.id}
+              id={currency.id}
+              rank={currency.rank}
+              symbol={currency.symbol}
+              name={currency.name}
+              supply={currency.supply}
+              param={search_params.toString()}
+            />
+          ))}
+      </tbody>
+    );
+  }
 
   return (
     <>
@@ -79,23 +96,10 @@ const Currencies = () => {
             <td></td>
           </tr>
         </thead>
-        <tbody>
-          {currency_data &&
-            display_currencies.map((currency) => (
-              <CurrencyItem
-                key={currency.id}
-                id={currency.id}
-                rank={currency.rank}
-                symbol={currency.symbol}
-                name={currency.name}
-                supply={currency.supply}
-                param={search_params.toString()}
-              />
-            ))}
-          <tr>
-            <td>1</td>
-          </tr>
-        </tbody>
+
+        <React.Suspense fallback={<>Loading</>}>
+          <Await resolve={loader_data.data}>{renderCurrencies}</Await>
+        </React.Suspense>
       </table>
     </>
   );
