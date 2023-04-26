@@ -15,7 +15,6 @@ export const currencyDetailsLoader = async ({
   params: Params;
   request: Request;
 }) => {
-  console.log(request.url);
   requireAuth(request.url);
   const data = await getData(params.id);
   return data;
